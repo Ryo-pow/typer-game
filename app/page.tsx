@@ -19,8 +19,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* スタートボタン */}
-      {/* Linkを使うことで、再読み込みなしで高速にページ遷移できます */}
       <Link 
         href="/game" 
         className="px-8 py-4 bg-blue-600 hover:bg-blue-500 rounded-full text-xl font-bold transition-all shadow-lg hover:shadow-blue-500/50"
