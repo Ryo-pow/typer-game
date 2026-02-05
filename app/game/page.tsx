@@ -22,11 +22,12 @@ export default function Game() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [input, setInput] = useState("");
     const [targetText, setTargetText] = useState("");
-
+    const [solveCount, setSolveCount] =useState(0);
 
     const startGame = () => {
         setIsPlaying(true);
         setScore(0);
+        setSolveCount(0);
         setTimeLeft(30);
         setInput("");
         setTargetText(WORDS[Math.floor(Math.random() * WORDS.length)]);
@@ -39,6 +40,12 @@ export default function Game() {
         if  (value === targetText) {
             setScore(score + 10);
             setInput("");
+            const newSolveCount = solveCount + 1;
+            setSolveCount(newSolveCount);
+
+            if (newSolveCount % 3 === 0) {
+                setTimeLeft((prevTime) => prevTime + 3);
+            }
 
             const nextWord = WORDS[Math.floor(Math.random() * WORDS.length)];
             setTargetText(nextWord);
