@@ -3,18 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const WORDS = [
-    "print('Hello')",
-    "import numpy as np",
-    "def main():",
-    "return True",
-    "class User:",
-    "for i in range(10):",
-    "if x > 0:",
-    "while True:",
-    "pip install fastapi",
-    "git commit -m 'fix'",
-];
 
 export default function Game() {
     const [timeLeft, setTimeLeft] = useState(30);
@@ -22,7 +10,22 @@ export default function Game() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [input, setInput] = useState("");
     const [targetText, setTargetText] = useState("");
-    const [solveCount, setSolveCount] =useState(0);
+    const [solveCount, setSolveCount] = useState(0);
+    const [wordList, setWordList] = useState<string[]>([]);
+
+    useEffect(() => {
+        const fetchWords =async () => {
+            try{
+                const res = await fetch("http://127.0.0.1:8000/words");
+                const data = await res.json();
+                setWordList(data.words);
+                console.log("Pythonからデータ取得成功:", data.words);
+            } catch (error) {
+                console.error("Pythonとの接続に失敗しました:", error);
+            }
+        };
+        fetchWords();
+    },[]);
 
     const startGame = () => {
         setIsPlaying(true);
@@ -30,7 +33,7 @@ export default function Game() {
         setSolveCount(0);
         setTimeLeft(30);
         setInput("");
-        setTargetText(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        setTargetText(wordList[Math.floor(Math.random() * wordList.length)]);
     };
 
     const handleInput = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +50,7 @@ export default function Game() {
                 setTimeLeft((prevTime) => prevTime + 3);
             }
 
-            const nextWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+            const nextWord = wordList[Math.floor(Math.random() * wordList.length)]
             setTargetText(nextWord);
         }
     };
